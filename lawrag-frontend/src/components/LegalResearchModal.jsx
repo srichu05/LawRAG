@@ -3,6 +3,11 @@ import { executeLegalResearch, checkBackendHealth } from '../services/api';
 
 const SAMPLE_QUERIES = [
   {
+    label: 'Industrial Tribunal Duties (Supreme Court)',
+    query: 'What are the functions and duties of the Industrial Tribunal under the Industrial Disputes Act, 1947?',
+    category: 'Employment and Labour Law'
+  },
+  {
     label: 'Termination & Retrenchment (Labour Law)',
     query: 'What constitutes valid grounds for termination and retrenchment under the Industrial Disputes Act, 1947?',
     category: 'Employment and Labour Law'

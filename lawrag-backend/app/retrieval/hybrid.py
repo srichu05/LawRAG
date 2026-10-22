@@ -75,7 +75,7 @@ def retrieve_hybrid(
         dense_results = retrieve_dense(query, embedder, top_k=dense_top_k)
         logger.debug("Dense retrieval returned %d results", len(dense_results))
     except Exception as exc:
-        logger.error("Dense retrieval failed during hybrid: %s", exc)
+        logger.info("Dense retrieval unavailable (%s); continuing with BM25 lexical retrieval.", exc)
 
     try:
         bm25_results = retrieve_bm25(query, top_k=bm25_top_k, index=bm25_index)

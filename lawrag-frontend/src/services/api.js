@@ -248,7 +248,7 @@ export const INSUFFICIENT_EVIDENCE_RESPONSE = {
 export async function checkBackendHealth() {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 1800);
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
 
     const response = await fetch(`${API_BASE_URL}${HEALTH_ENDPOINT}`, {
       method: 'GET',
@@ -267,7 +267,8 @@ export async function checkBackendHealth() {
       };
     }
     return { online: false, source: 'Offline (Fallback Enabled)' };
-  } catch {
+  } catch (err) {
+    console.warn('Backend health check failed:', err);
     return {
       online: false,
       source: 'Local Indexed Indian Legal Corpus Sandbox',
@@ -285,29 +286,10 @@ export async function executeLegalResearch(query, selectedCategory = 'All') {
     throw new Error('Research query cannot be empty.');
   }
 
-  const normalizedQuery = query.toLowerCase().trim();
-
-  // Explicit check for insufficient evidence trigger
-  const isExplicitUnsupported =
-    normalizedQuery.includes('martian law') ||
-    normalizedQuery.includes('unsupported') ||
-    normalizedQuery.includes('insufficient') ||
-    normalizedQuery.includes('cryptocurrency penal code 999') ||
-    normalizedQuery.includes('california vehicle code');
-
-  if (isExplicitUnsupported) {
-    return {
-      ...INSUFFICIENT_EVIDENCE_RESPONSE,
-      query,
-      timestamp: new Date().toISOString(),
-      backendSource: 'Evidence Verification Guardrail (Demo Mode)'
-    };
-  }
-
-  // Attempt real FastAPI backend call if reachable
+  // Attempt real FastAPI backend call first (with generous 60s timeout for LLM generation)
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500);
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
 
     const response = await fetch(`${API_BASE_URL}${RESEARCH_ENDPOINT}`, {
       method: 'POST',
@@ -326,15 +308,36 @@ export async function executeLegalResearch(query, selectedCategory = 'All') {
       const backendData = await response.json();
       return {
         ...backendData,
-        backendSource: 'FastAPI Agentic RAG Live Backend',
+        backendSource: backendData.backendSource || 'FastAPI Agentic RAG Live Backend',
         timestamp: new Date().toISOString()
       };
+    } else {
+      console.warn(`Backend responded with status ${response.status}: ${response.statusText}`);
     }
-  } catch {
-    // Backend offline or unreachable — seamlessly proceed to local indexed verified corpus
+  } catch (err) {
+    console.warn('Backend call failed, falling back to local corpus fixture:', err);
   }
 
-  // Match query against authentic Indian Legal Corpus
+  const normalizedQuery = query.toLowerCase().trim();
+
+  // Explicit check for insufficient evidence trigger in offline fallback mode
+  const isExplicitUnsupported =
+    normalizedQuery.includes('martian law') ||
+    normalizedQuery.includes('unsupported') ||
+    normalizedQuery.includes('insufficient') ||
+    normalizedQuery.includes('cryptocurrency penal code 999') ||
+    normalizedQuery.includes('california vehicle code');
+
+  if (isExplicitUnsupported) {
+    return {
+      ...INSUFFICIENT_EVIDENCE_RESPONSE,
+      query,
+      timestamp: new Date().toISOString(),
+      backendSource: 'Evidence Verification Guardrail (Demo Mode)'
+    };
+  }
+
+  // Match query against authentic Indian Legal Corpus fixture
   let matchedCorpus = null;
   let highestScore = 0;
 

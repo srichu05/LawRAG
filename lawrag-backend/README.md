@@ -342,10 +342,32 @@ python -m pytest tests/test_agent.py -v
 
 ---
 
-## Phase 3 (Next)
+---
 
-Phase 3 will expose this workflow over a FastAPI backend:
-- `GET /health` — system readiness & index status
-- `POST /api/query` — Pydantic request/response endpoint for web clients
-- Frontend integration with React/Vite web application
+## Phase 3 — FastAPI Backend & Frontend Integration
+
+Phase 3 exposes the Agentic RAG workflow over a high-performance FastAPI server integrated with the React/Vite frontend (`lawrag-frontend`).
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/health` or `/api/v1/health` | `GET` | Operational health check (returns LLM provider, BM25 index readiness, and chunk count). |
+| `/api/v1/research` or `/api/query` | `POST` | Executes full Agentic RAG pipeline. Accepts `{"query": "...", "category": "..."}` and returns grounded answer, citations, statutes, and audit traces. |
+| `/docs` | `GET` | Interactive Swagger UI API documentation. |
+
+### Running the Full System Locally
+
+```bash
+# Terminal 1: Start FastAPI Backend (Port 8000)
+cd lawrag-backend
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+
+# Terminal 2: Start React Frontend (Port 5173)
+cd lawrag-frontend
+npm run dev -- --port 5173
+```
+
+Open `http://localhost:5173` in your browser. The top status bar will show a green dot with `Backend: FastAPI Backend Live`.
+
 
