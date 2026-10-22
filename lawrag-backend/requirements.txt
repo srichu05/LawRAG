@@ -1,0 +1,32 @@
+# Core dataset and data handling
+datasets>=2.14.0
+huggingface-hub>=0.20.0
+
+# Vector store
+chromadb>=0.5.0
+
+# Lexical retrieval
+rank-bm25>=0.2.2
+numpy>=1.24.0
+
+# HTTP client (for embeddings API)
+requests>=2.31.0
+
+# Environment variable loading
+python-dotenv>=1.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Agentic RAG workflow (Phase 2)
+langgraph>=0.0.30
+
+# Optional hosted LLM SDKs (Phase 2):
+# groq>=0.9.0
+# openai>=1.0.0
+
+# Future Phase 3 dependencies (FastAPI server):
+# fastapi>=0.104.0
+# uvicorn[standard]>=0.24.0
+# pydantic>=2.0.0
