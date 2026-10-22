@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="8" fill="#00123a"/>
+  <!-- Scales of Justice with AI Nodes -->
+  <path d="M32 10 L32 52" stroke="#e3b969" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M18 18 L46 18" stroke="#e3b969" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="32" cy="12" r="3" fill="#e3b969"/>
+  <!-- Left Pan -->
+  <path d="M18 18 L12 32 M18 18 L24 32" stroke="#e3b969" stroke-width="1.5"/>
+  <path d="M10 32 C10 38, 26 38, 26 32 Z" fill="#e3b969" opacity="0.85"/>
+  <!-- Right Pan -->
+  <path d="M46 18 L40 32 M46 18 L52 32" stroke="#e3b969" stroke-width="1.5"/>
+  <path d="M38 32 C38 38, 54 38, 54 32 Z" fill="#e3b969" opacity="0.85"/>
+  <!-- Base -->
+  <path d="M22 52 L42 52" stroke="#e3b969" stroke-width="3" stroke-linecap="round"/>
+</svg>
